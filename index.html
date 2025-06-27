@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>College Recommendation Chatbot</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <h2>College Recommendation Chatbot</h2>
+
+  <form id="collegeForm">
+    State: <input type="text" id="state"><br>
+    Max UG Fee: <input type="number" id="max_fee"><br>
+    Min Placement %: <input type="number" id="min_placement"><br>
+    Course/Stream: <input type="text" id="course"><br>
+    Top N Results: <input type="number" id="top_n" value="10"><br>
+    <button type="submit">Find Colleges</button>
+  </form>
+
+  <h3>Results:</h3>
+  <div id="results"></div>
+
+  <script>
+    document.getElementById('collegeForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      // Collect form inputs
+      const state = document.getElementById('state').value;
+      const max_fee = document.getElementById('max_fee').value;
+      const min_placement = document.getElementById('min_placement').value;
+      const course = document.getElementById('course').value;
+      const top_n = document.getElementById('top_n').value;
+
+      // Build query string
+      const query = `?state=${state}&max_fee=${max_fee}&min_placement=${min_placement}&course=${course}&top_n=${top_n}`;
+
+      // Make GET request to Flask API
+      fetch('/get_colleges' + query)
+        .then(response => response.json())
+        .then(data => {
+          let html = "";
+
+          if (data.message) {
+            html = `<p>${data.message}</p>`;
+          } else {
+            html = "<table><tr><th>College</th><th>State</th><th>UG Fee</th><th>Placement</th><th>Rating</th><th>Stream</th></tr>";
+            data.forEach(college => {
+              html += `<tr>
+                <td>${college.College_Name}</td>
+                <td>${college.State}</td>
+                <td>${college.UG_fee}</td>
+                <td>${college.Placement}</td>
+                <td>${college.Rating}</td>
+                <td>${college.Stream}</td>
+              </tr>`;
+            });
+            html += "</table>";
+          }
+
+          document.getElementById('results').innerHTML = html;
+        })
+        .catch(error => {
+          document.getElementById('results').innerHTML = `<p style="color:red;">Error fetching data: ${error}</p>`;
+        });
+    });
+  </script>
+</body>
+</html>
