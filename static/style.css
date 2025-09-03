@@ -45,10 +45,37 @@ form button:hover {
   background-color: #005f99;
 }
 
+/* .results-container {
+  display: flex;
+  justify-content: space-between; /* or use flex-start / center */
+  /* align-items: flex-start;
+  gap: 20px;
+  margin-top: 30px;
+  flex-wrap: wrap; /* Optional for responsiveness 
+} */
+
 #results {
-  max-width: 90%;
-  margin: 0 auto;
+  flex: 1;
+  min-width: 300px;
 }
+
+#btn {
+  max-width: 250px;
+  padding: 10px 20px;
+  background-color: #007acc;
+  color: white;
+  font-family: 'Arial', sans-serif;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  height: fit-content;
+}
+#btn:hover {
+  background-color: #005f99;
+}
+
 
 table {
   width: 100%;
