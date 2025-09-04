@@ -1,4 +1,6 @@
 from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, render_template, Response
+
 import pandas as pd
 import os
 import json
@@ -8,11 +10,12 @@ app = Flask(__name__)
 # Load your cleaned dataset
 df_clean = pd.read_csv("Dataset/cleaned_college_data.csv")
 
+from flask import render_template
 
 @app.route("/")
 def serve_frontend():
-    # Serve the index.html file
-    return send_from_directory(os.getcwd(), "index.html")
+    return render_template("index.html")
+
 
 @app.route("/get_colleges", methods=["GET"])
 def get_colleges():
@@ -63,8 +66,7 @@ def get_colleges():
     else:
         return jsonify(json.loads(result.to_json(orient="records")))
 
-if __name__ == "__main__":
-    app.run(debug=True)
+
 
 from flask import Response  # Add this import at top if not already
 
@@ -113,3 +115,5 @@ def download_colleges():
         mimetype="text/csv",
         headers={"Content-disposition": "attachment; filename=colleges.csv"}
     )
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
